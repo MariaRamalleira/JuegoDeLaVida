@@ -167,7 +167,7 @@ public static int cuantasVivasRodean(int fila, int columna) {
 				}
 			}
 		}
-   System.out.println(numVivas);
+ 
   }
  return numVivas;
  
