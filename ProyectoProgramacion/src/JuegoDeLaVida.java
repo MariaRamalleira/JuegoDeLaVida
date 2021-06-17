@@ -68,6 +68,31 @@ System.out.println();
 }
 
 public static int cuantasVivasRodean(int fila, int columna) {
+	//int vivas= 0;
+	//primera columna de cualquier fila menos la primera y la ultima
+	//if(columna==TAMANIO-1 && (fila<TAMANIO-1 && fila>0)) {
+	//	if(juego[fila][columna-1]==VIVA) {
+		//	vivas++;
+		//}
+		//if(juego[fila-1][columna]==VIVA){
+		//	vivas++;
+		//}
+		//if(juego[fila+1][columna]==VIVA) {
+		//	vivas++;
+		//}
+	//}
+	//primera fila de cualquier columna menos la primera y la ultima
+	//if(fila==0 && columna >0 && columna <49) {
+	//	if(juego[fila][columna+1]==VIVA) {
+	//		vivas++;
+	//	}
+	//	if(juego[fila][columna-1]==VIVA) {
+	//		vivas++;
+	//	}
+	//	if(juego[fila+1][columna]==VIVA) {
+	//		vivas++;
+	//	}
+	//}
 	
 	int numVivas=0;
 	if(fila>0 && fila<TAMANIO-1 && columna>0 && columna<TAMANIO-1) {
