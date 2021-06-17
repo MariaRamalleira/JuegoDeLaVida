@@ -132,7 +132,7 @@ public class JuegoDeLaVida {
 				
 				for (int i = comienzoFila; i <= finalFila; i++) {
 					for (int j = comienzoCol; j <= finalCol; j++) {
-						if ( !(i ==fila && j== columna) && juego[i][j] == VIVA) {
+						if (!(i == fila && j == columna) && juego[i][j] == VIVA) {
 							numVivas++;
 						}
 					}
@@ -226,7 +226,7 @@ public class JuegoDeLaVida {
 	}
 
 	public static void main(String[] args) {
-		leerMatriz("ficheros/cargaFaro.txt");
+		leerMatriz("ficheros/cargaNaveGrande.txt");
 		imprimirTablero();
 		System.out.println("\n");
 		imprimirCuantasRodean();
