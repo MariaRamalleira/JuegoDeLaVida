@@ -1,5 +1,8 @@
+
+
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.Scanner;
 
 public class JuegoDeLaVida {
 
@@ -7,7 +10,9 @@ public class JuegoDeLaVida {
 
 	static final char IMPRIME_MUERTA = ' ';
 	static final char IMPRIME_VIVA = '*';
-	static final int VIVA=1;
+	static final int VIVA = 1;
+	static final int MUERTA = 0;
+	
 
 	static int[][] juego = new int[TAMANIO][TAMANIO];
 
@@ -28,11 +33,11 @@ public class JuegoDeLaVida {
 					if (numCol < fila.length) {
 						juego[numFila][numCol] = Integer.parseInt(fila[numCol].trim());
 					} else {
-//una vez leídas todas las columnas del fichero, el resto se rellenan a ceros
+//una vez leÃ­das todas las columnas del fichero, el resto se rellenan a ceros
 						juego[numFila][numCol] = 0;
 					}
 
-				} // una vez rellenada esa fila, incrementamos el número de fila
+				} // una vez rellenada esa fila, incrementamos el nÃºmero de fila
 				numFila++;
 
 			} // fin del while
@@ -44,7 +49,7 @@ public class JuegoDeLaVida {
 					}
 
 				}
-			} // si no es así, no hay nada que rellenar
+			} // si no es asÃ­, no hay nada que rellenar
 			fr.close();
 		} catch (Exception e) {
 			System.out.println("Excepcion leyendo fichero " + ruta + ": " + e);
@@ -63,16 +68,16 @@ public class JuegoDeLaVida {
 		}
 
 	}
-	
+
 	static void imprimirCuantasRodean() {
-		
+
 		for (int i = 0; i < TAMANIO; i++) {
 			for (int j = 0; j < TAMANIO; j++) {
 				System.out.format("%d ", cuantasVivasRodean(i, j));
 			}
 			System.out.println();
 		}
-		
+
 	}
 
 	public static int cuantasVivasRodean(int fila, int columna) {
@@ -103,133 +108,88 @@ public class JuegoDeLaVida {
 		// }
 
 		int numVivas = 0;
-		
-		int comienzoFila, finalFila, comienzoCol, finalCol;
-		
-		//elecci�n del comienzo y final del recorrido de la fila
-		if (fila==0) {
-			comienzoFila=0;
-			finalFila=1;
-		} else if (fila== (TAMANIO-1)) {
-			comienzoFila=TAMANIO-2;
-			finalFila=TAMANIO-1;
-		} else {
-			comienzoFila=fila-1;
-			finalFila=fila+1;
-		}
-		
-		//elecci�n del comienzo y final del recorrido de la columna
-				if (columna==0) {
-					comienzoCol=0;
-					finalCol=1;
-				} else if (columna== (TAMANIO-1)) {
-					comienzoCol=TAMANIO-2;
-					finalCol=TAMANIO-1;
-				} else {
-					comienzoCol=columna-1;
-					finalCol=columna+1;
-				}
-				
-				for (int i = comienzoFila; i <= finalFila; i++) {
-					for (int j = comienzoCol; j <= finalCol; j++) {
-						if ( !(i ==fila && j== columna) && juego[i][j] == VIVA) {
-							numVivas++;
-						}
-					}
 
+		int comienzoFila, finalFila, comienzoCol, finalCol;
+
+		// elección del comienzo y final del recorrido de la fila
+		if (fila == 0) {
+			comienzoFila = 0;
+			finalFila = 1;
+		} else if (fila == (TAMANIO - 1)) {
+			comienzoFila = TAMANIO - 2;
+			finalFila = TAMANIO - 1;
+		} else {
+			comienzoFila = fila - 1;
+			finalFila = fila + 1;
+		}
+
+		// elección del comienzo y final del recorrido de la columna
+		if (columna == 0) {
+			comienzoCol = 0;
+			finalCol = 1;
+		} else if (columna == (TAMANIO - 1)) {
+			comienzoCol = TAMANIO - 2;
+			finalCol = TAMANIO - 1;
+		} else {
+			comienzoCol = columna - 1;
+			finalCol = columna + 1;
+		}
+
+		for (int i = comienzoFila; i <= finalFila; i++) {
+			for (int j = comienzoCol; j <= finalCol; j++) {
+				if (!(i == fila && j == columna) && juego[i][j] == VIVA) {
+					numVivas++;
 				}
-				
-				
-		
-//		
-//		if (fila > 0 && fila < TAMANIO - 1 && columna > 0 && columna < TAMANIO - 1) {
-//			for (int i = fila - 1; i <= fila + 1; i++) {
-//				for (int j = columna - 1; j <= columna + 1; j++) {
-//					if (i != fila && j != columna && juego[i][j] == VIVA) {
-//						numVivas++;
-//					}
-//				}
-//
-//			}
-//			if (fila == 0 && columna == 0) {
-//				for (int i = 0; i <= fila + 1; i++) {
-//					for (int j = 0; j < columna + 1; j++) {
-//						if (i != fila && j != columna && juego[i][j] == VIVA) {
-//							numVivas++;
-//						}
-//					}
-//				}
-//			}
-//			if (fila == 0 && columna == TAMANIO - 1) {
-//				for (int i = 0; i < fila + 1; i++) {
-//					for (int j = TAMANIO - 2; j < TAMANIO - 1; j++) {
-//						if (i != fila && j != columna && juego[i][j] == VIVA) {
-//							numVivas++;
-//						}
-//					}
-//
-//				}
-//			}
-//			if (fila == TAMANIO - 1 && columna == 0) {
-//				for (int i = TAMANIO - 2; i < TAMANIO - 1; i++) {
-//					for (int j = 0; j < columna + 1; j++) {
-//						if (i != fila && j != columna && juego[i][j] == VIVA) {
-//							numVivas++;
-//						}
-//					}
-//				}
-//			}
-//			if (fila == TAMANIO - 1 && columna == TAMANIO - 1) {
-//				for (int i = TAMANIO - 2; i < TAMANIO - 1; i++) {
-//					for (int j = TAMANIO - 2; j < TAMANIO - 1; j++) {
-//						if (i != fila && j != columna && juego[i][j] == VIVA) {
-//							numVivas++;
-//						}
-//					}
-//				}
-//			}
-//			if (fila == 0 && columna != TAMANIO - 1 && columna != 0) {
-//				for (int i = 0; i < fila + 1; i++) {
-//					for (int j = columna - 1; j < columna + 1; j++) {
-//						if (i != fila && j != columna && juego[i][j] == VIVA) {
-//							numVivas++;
-//						}
-//					}
-//				}
-//			}
-//			if (fila == TAMANIO - 1 && columna != TAMANIO - 1 && columna != 0) {
-//				for (int i = TAMANIO - 2; i < TAMANIO - 1; i++) {
-//					for (int j = columna - 1; j < columna + 1; j++) {
-//						if (i != fila && j != columna && juego[i][j] == VIVA) {
-//							numVivas++;
-//						}
-//					}
-//				}
-//			}
-//			if (fila != TAMANIO - 1 && fila != 0 && columna == 0) {
-//				for (int i = fila - 1; i < fila + 1; i++) {
-//					for (int j = columna - 1; j < columna + 1; j++) {
-//						if (i != fila && j != columna && juego[i][j] == VIVA) {
-//							numVivas++;
-//						}
-//					}
-//				}
-//			}
-//
-//		}
+			}
+
+		}
+
+
 		return numVivas;
 
 	}
 
-	public void generaciones() {
-
+	public static int [][] generaciones2(int [][] juego) throws InterruptedException {
+		 Scanner sc = new Scanner(System.in);
+		int parada = 1;
+		
+		while(parada==1) {
+			for(int i=0;i<TAMANIO-1;i++) {
+				for(int j=0;j<TAMANIO-1;j++) {
+					cuantasVivasRodean(i,j);
+					if(juego[i][j]==VIVA) {
+						if(cuantasVivasRodean(i,j)<2) {
+							juego[i][j]=MUERTA;
+						}else if(cuantasVivasRodean(i,j)>2 && cuantasVivasRodean(i,j)==3 ) {
+							juego[i][j]=VIVA;
+						}else {
+							juego[i][j]=MUERTA;
+						}
+					
+					}else {
+						if(cuantasVivasRodean(i,j)==3) {
+							juego[i][j]= VIVA;
+						}
+					}
+				}
+			}
+			imprimirTablero();
+			imprimirCuantasRodean();
+			System.out.println("Para seguir pulse 1 y para parar pulse 2");
+			parada= sc.nextInt();
+			
+			
+		}
+		sc.close();
+	  return juego;	
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 		leerMatriz("ficheros/cargaFaro.txt");
 		imprimirTablero();
 		System.out.println("\n");
 		imprimirCuantasRodean();
-
+		generaciones2(juego);
+      
 	}
 }
