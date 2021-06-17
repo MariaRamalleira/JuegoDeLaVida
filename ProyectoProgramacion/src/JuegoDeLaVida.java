@@ -31,10 +31,10 @@ for (int numCol=0; numCol<TAMANIO; numCol++) {
 if (numCol< fila.length) {
 juego[numFila][numCol]= Integer.parseInt(  fila[numCol].trim());
 } else {
-//una vez leídas todas las columnas del fichero, el resto se rellenan a ceros
+//una vez leÃ­das todas las columnas del fichero, el resto se rellenan a ceros
 juego[numFila][numCol]=0; }
 
-} //una vez rellenada esa fila, incrementamos el número de fila
+} //una vez rellenada esa fila, incrementamos el nÃºmero de fila
 numFila++;
 
 } //fin del while
@@ -46,7 +46,7 @@ juego[i][j]= 0;
 }
 
 }
-} //si no es así, no hay nada que rellenar
+} //si no es asÃ­, no hay nada que rellenar
 fr.close();
 } catch (Exception e) {
 System.out.println("Excepcion leyendo fichero " + ruta + ": " + e);
@@ -162,7 +162,7 @@ public  void generaciones() {
 public static void main(String[] args) {
 leerMatriz("cargaFaro.txt");
 imprimirTablero();
-cuantasVivasRodean(5,5);
+
 
 
 
