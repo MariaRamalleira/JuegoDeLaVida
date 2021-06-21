@@ -1,13 +1,14 @@
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class JuegoDeLaVida {
 	// Tama√±o de la matriz
-	static final int TAMANIO = 50;
+	static final int TAMANIO = 40;
 	// Imprime casilla muerta con un espacio y casilla viva con un asterisco
-	static final char IMPRIME_MUERTA = ' ';
+	static final char IMPRIME_MUERTA = '.';
 	static final char IMPRIME_VIVA = '*';
 	// Casilla viva es un 1 en la matriz y la muerta un 0
 	static final int VIVA = 1;
@@ -15,7 +16,14 @@ public class JuegoDeLaVida {
 	// Juego es el estado inicial de la matriz y generaciones es el cambio de cada
 	// iteraci√≥n
 	static int[][] juego = new int[TAMANIO][TAMANIO];
-	static int[][] generaciones = new int[TAMANIO][TAMANIO];
+
+	
+	//numero de generaciones a producir
+	static final int GENERACIONES=30;
+	
+	//retardo entre generaciones, en milisegundos
+	static final int RETARDO=2000;
+	
 
 	/**
 	 * @param ruta al fichero que contiene el estado inicial de la matriz Lee la
@@ -76,6 +84,7 @@ public class JuegoDeLaVida {
 			}
 			System.out.println();
 		}
+		
 
 	}
 
@@ -186,18 +195,20 @@ public class JuegoDeLaVida {
 		return generaciones;
 	}
 
-	public static void main(String[] args) throws InterruptedException {
-		leerMatriz("ficheros/cargaFaro.txt");
+	public static void main(String[] args) throws InterruptedException, IOException {
+		leerMatriz("ficheros/cargaNaveGrande.txt");
 
-		imprimirTablero();
-		System.out.println("\n");
-		imprimirCuantasRodean();
-		// generacionesConDialogo(juego);
-		for (int i = 0; i < 6; i++) {
 
-			generacionesSleep(juego);
+		for (int i = 0; i <GENERACIONES ; i++) {
+		
+			System.out.println("\t\t  GENERACI”N "+ (i+1));
+			imprimirTablero();
+			Thread.sleep(RETARDO);
+			
+			//generamos la siguiente generaciÛn y la guardamos en el tablero
+			juego = sigienteGeneracion (juego);
 
-			Thread.sleep(5000);
+			
 		}
 
 	}
@@ -208,34 +219,36 @@ public class JuegoDeLaVida {
 	 *         juego
 	 * @throws InterruptedException
 	 */
-	public static int[][] generacionesSleep(int[][] generaciones) throws InterruptedException {
+	public static int[][] sigienteGeneracion (int[][] generaciones) throws InterruptedException {
 
 		// Si la persona escribe 1 va a permanecer en el bucle, en cuanto escriba 2
 		// saldra del bucle
-
-		for (int i = 0; i < TAMANIO - 1; i++) {
-			for (int j = 0; j < TAMANIO - 1; j++) {
-				cuantasVivasRodean(i, j);
+		int [][] nuevoTablero= new int[TAMANIO][TAMANIO];
+		for (int i = 0; i < TAMANIO ; i++) {
+			for (int j = 0; j < TAMANIO ; j++) {
+				//cuantasVivasRodean(i, j);
 				// si la celda est√° viva
 				if (generaciones[i][j] == VIVA) {
 					if (cuantasVivasRodean(i, j) < 2) {
-						generaciones[i][j] = MUERTA;
-					} else if (cuantasVivasRodean(i, j) >= 2 && cuantasVivasRodean(i, j) <= 3) {
-						generaciones[i][j] = VIVA;
+						nuevoTablero[i][j] = MUERTA;
+					} else if (cuantasVivasRodean(i, j) < 4) {
+						nuevoTablero[i][j] = VIVA;
 					} else {
-						generaciones[i][j] = MUERTA;
+						nuevoTablero[i][j] = MUERTA;
 					}
 					// si la celda esta muerta
 				} else {
 					if (cuantasVivasRodean(i, j) == 3) {
-						generaciones[i][j] = VIVA;
+						nuevoTablero[i][j] = VIVA;
 					}
 				}
 			}
 		}
-		imprimirTablero();
 
-		return generaciones;
+
+		return nuevoTablero;
 	}
+	
+	
 
 }
