@@ -1,14 +1,14 @@
 
-
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class JuegoDeLaVida {
 	// Tamaño de la matriz
-	static final int TAMANIO = 50;
+	static final int TAMANIO = 40;
 	// Imprime casilla muerta con un espacio y casilla viva con un asterisco
-	static final char IMPRIME_MUERTA = ' ';
+	static final char IMPRIME_MUERTA = '.';
 	static final char IMPRIME_VIVA = '*';
 	// Casilla viva es un 1 en la matriz y la muerta un 0
 	static final int VIVA = 1;
@@ -16,7 +16,14 @@ public class JuegoDeLaVida {
 	// Juego es el estado inicial de la matriz y generaciones es el cambio de cada
 	// iteración
 	static int[][] juego = new int[TAMANIO][TAMANIO];
-	static int[][] generaciones = new int[TAMANIO][TAMANIO];
+
+	
+	//numero de generaciones a producir
+	static final int GENERACIONES=30;
+	
+	//retardo entre generaciones, en milisegundos
+	static final int RETARDO=2000;
+	
 
 	/**
 	 * @param ruta al fichero que contiene el estado inicial de la matriz Lee la
@@ -77,11 +84,13 @@ public class JuegoDeLaVida {
 			}
 			System.out.println();
 		}
+		
 
 	}
 
 	/**
-	 * Imprime por pantalla una matriz con los numeros de celulas vivas que rodean la celda
+	 * Imprime por pantalla una matriz con los numeros de celulas vivas que rodean
+	 * la celda
 	 */
 	static void imprimirCuantasRodean() {
 // imprime la matriz con los numeros de celulas vecinas de cada celda
@@ -97,7 +106,8 @@ public class JuegoDeLaVida {
 	/**
 	 * @param fila
 	 * @param columna
-	 * @return numVivas, es el numeros de celulas vivas que tiene una celda alrededor
+	 * @return numVivas, es el numeros de celulas vivas que tiene una celda
+	 *         alrededor
 	 */
 	public static int cuantasVivasRodean(int fila, int columna) {
 
@@ -105,22 +115,19 @@ public class JuegoDeLaVida {
 
 		int comienzoFila, finalFila, comienzoCol, finalCol;
 
-		// elección del comienzo y final del recorrido de la fila
-		// primera linea horizontal, 0 misma fila y 1 la de la derecha
+		// elecci�n del comienzo y final del recorrido de la fila
 		if (fila == 0) {
 			comienzoFila = 0;
 			finalFila = 1;
 		} else if (fila == (TAMANIO - 1)) {
-			// -1 misma fila y -2 la de la izquierda
 			comienzoFila = TAMANIO - 2;
 			finalFila = TAMANIO - 1;
 		} else {
-			// tanto izquierda como el de la derecha
 			comienzoFila = fila - 1;
 			finalFila = fila + 1;
 		}
 
-		// elección del comienzo y final del recorrido de la columna
+		// elecci�n del comienzo y final del recorrido de la columna
 		if (columna == 0) {
 			comienzoCol = 0;
 			finalCol = 1;
@@ -131,7 +138,7 @@ public class JuegoDeLaVida {
 			comienzoCol = columna - 1;
 			finalCol = columna + 1;
 		}
-		// asegurarse que no se tiene en cuenta la celda en la que te encuentras
+
 		for (int i = comienzoFila; i <= finalFila; i++) {
 			for (int j = comienzoCol; j <= finalCol; j++) {
 				if (!(i == fila && j == columna) && juego[i][j] == VIVA) {
@@ -147,7 +154,8 @@ public class JuegoDeLaVida {
 
 	/**
 	 * @param generaciones
-	 * @return generaciones, matriz resultado despues de aplicar las reglas del juego
+	 * @return generaciones, matriz resultado despues de aplicar las reglas del
+	 *         juego
 	 * @throws InterruptedException
 	 */
 	public static int[][] generacionesConDialogo(int[][] generaciones) throws InterruptedException {
@@ -187,53 +195,60 @@ public class JuegoDeLaVida {
 		return generaciones;
 	}
 
+	public static void main(String[] args) throws InterruptedException, IOException {
+		leerMatriz("ficheros/cargaNaveGrande.txt");
+
+
+		for (int i = 0; i <GENERACIONES ; i++) {
+		
+			System.out.println("\t\t  GENERACI�N "+ (i+1));
+			imprimirTablero();
+			Thread.sleep(RETARDO);
+			
+			//generamos la siguiente generaci�n y la guardamos en el tablero
+			juego = sigienteGeneracion (juego);
+
+			
+		}
+
+	}
+
 	/**
 	 * @param generaciones
-	 * @return generaciones, matriz resultado despues de aplicar las reglas del juego
+	 * @return generaciones, matriz resultado despues de aplicar las reglas del
+	 *         juego
 	 * @throws InterruptedException
 	 */
-	public static int[][] generacionesSleep(int[][] generaciones) throws InterruptedException {
+	public static int[][] sigienteGeneracion (int[][] generaciones) throws InterruptedException {
 
 		// Si la persona escribe 1 va a permanecer en el bucle, en cuanto escriba 2
 		// saldra del bucle
-
-		for (int i = 0; i < TAMANIO - 1; i++) {
-			for (int j = 0; j < TAMANIO - 1; j++) {
-				cuantasVivasRodean(i, j);
+		int [][] nuevoTablero= new int[TAMANIO][TAMANIO];
+		for (int i = 0; i < TAMANIO ; i++) {
+			for (int j = 0; j < TAMANIO ; j++) {
+				//cuantasVivasRodean(i, j);
 				// si la celda está viva
 				if (generaciones[i][j] == VIVA) {
 					if (cuantasVivasRodean(i, j) < 2) {
-						generaciones[i][j] = MUERTA;
-					} else if (cuantasVivasRodean(i, j) >= 2 && cuantasVivasRodean(i, j) <= 3) {
-						generaciones[i][j] = VIVA;
+						nuevoTablero[i][j] = MUERTA;
+					} else if (cuantasVivasRodean(i, j) < 4) {
+						nuevoTablero[i][j] = VIVA;
 					} else {
-						generaciones[i][j] = MUERTA;
+						nuevoTablero[i][j] = MUERTA;
 					}
 					// si la celda esta muerta
 				} else {
 					if (cuantasVivasRodean(i, j) == 3) {
-						generaciones[i][j] = VIVA;
+						nuevoTablero[i][j] = VIVA;
 					}
 				}
 			}
 		}
-		imprimirTablero();
 
-		return generaciones;
+
+		return nuevoTablero;
 	}
+	
+	
 
-	public static void main(String[] args) throws InterruptedException {
-		leerMatriz("ficheros/cargaFaro.txt");
-		imprimirTablero();
-		System.out.println("\n");
-		imprimirCuantasRodean();
-		// generacionesConDialogo(juego);
-		for (int i = 0; i < 6; i++) {
-
-			generacionesSleep(juego);
-
-			Thread.sleep(5000);
-		}
-
-	}
 }
